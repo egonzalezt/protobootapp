@@ -24,26 +24,3 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B install --file pom.xml
-      - name: Create and package the artifact
-        run: |
-          tar -czf ProtobootAppAmd64.tar.gz -C target/ .
-        shell: bash
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        with:
-          tag_name: v1.0
-          release_name: Release v1.0
-          body: |
-            Release notes for version 1.0.
-      - name: Upload artifact to release
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./ProtobootAppAmd64.tar.gz
-          asset_name: ProtobootAppAmd64.tar.gz
-          asset_content_type: application/gzip
-      - name: Set artifact URL as an output
-        id: set-output
-        run: echo "::set-output name=artifact_url::${{ steps.upload-release-asset.outputs.browser_download_url }}"
